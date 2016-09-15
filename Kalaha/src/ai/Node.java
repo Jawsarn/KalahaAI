@@ -16,6 +16,21 @@ public class Node{
         m_depth = p_depth;
         m_gameState = p_gameState;
     }
-    
+    void CreateChildren()
+    {
+        if (m_depth >= m_maxDepth)
+        {
+            //börja propagera uppåt å skit
+        }
+        else{
+            for (int i = 0; i <6; i++)
+            {
+                GameState t_gameState = m_gameState;
+                t_gameState.makeMove(i);
+                childNodes[i] = new Node(m_depth++, t_gameState);
+            }
+            //Creatat allt lägg kod här för det som ska hända efter
+        }
+    }
 
 }
