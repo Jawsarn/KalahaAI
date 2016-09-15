@@ -15,8 +15,8 @@ public class TreeHandler {
 
     public void CreateTree(GameState p_currentState)
     {
-        //m_rootNode = RootNode(p_currentState.clone(),0);
-        //m_rootNode.SimulateTurns();
+        m_rootNode = new Node(0, p_currentState.clone()); // TODO do we need to clone?
+        m_rootNode.CreateChildren();
     }
 
     public void SetTreeMaxDepth(int p_maxDepth)

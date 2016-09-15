@@ -25,9 +25,12 @@ public class Node{
         else{
             for (int i = 0; i <6; i++)
             {
-                GameState t_gameState = m_gameState;
-                t_gameState.makeMove(i);
-                childNodes[i] = new Node(m_depth++, t_gameState);
+                GameState t_gameState = m_gameState.clone();
+                boolean t_successful = t_gameState.makeMove(i);
+                if (t_successful) {
+                    childNodes[i] = new Node(m_depth++, t_gameState);
+                    childNodes[i].CreateChildren(); // TODO Launch a new thread here
+                }
             }
             //Creatat allt lägg kod här för det som ska hända efter
         }
