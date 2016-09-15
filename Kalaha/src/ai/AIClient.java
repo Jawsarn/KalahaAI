@@ -44,7 +44,7 @@ public class AIClient implements Runnable
             socket = new Socket("localhost", KalahaMain.port);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            treeHandler = new TreeHandler();
+            treeHandler = new TreeHandler(5);
 
             addText("Done");
             connected = true;
