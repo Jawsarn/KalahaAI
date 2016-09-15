@@ -3,11 +3,16 @@ package ai;
 import kalaha.GameState;
 
 /**
- * Created by Becca on 2016-09-15.
+ * Created by Konrad on 2016-09-15.
  */
 public class TreeHandler {
+    public static int m_maxDepth;
+    public TreeHandler(int p_maxDepth)
+    {
+        m_maxDepth = p_maxDepth;
+    }
 
-    void CreateTree(GameState currentBoard)
+    public void CreateTree(GameState p_currentState)
     {
 
     }
@@ -20,5 +25,4 @@ public class TreeHandler {
     {
         return 1 + (int)(Math.random() * 6);
     }
-
 }
