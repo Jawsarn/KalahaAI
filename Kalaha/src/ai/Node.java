@@ -15,11 +15,13 @@ public class Node{
     Node[] childNodes = new Node[6];
     int m_bestValue = 0;
     int m_bestNodeIndex = -1;
+    boolean m_max;
     List<Integer> listOfMoves = new ArrayList<Integer>();
-    Node(int p_depth, GameState p_gameState){
+    Node(int p_depth, GameState p_gameState, boolean p_max){
         m_depth = p_depth;
         m_gameState = p_gameState;
         m_maxDepth = TreeHandler.m_maxDepth;
+        m_max = p_max;
 
     }
     List<Integer> GetMoveList(){
@@ -43,25 +45,14 @@ public class Node{
                 GameState t_gameState = m_gameState.clone();
                 int t_currentPlayer = t_gameState.getNextPlayer();
                 boolean t_successful = t_gameState.makeMove(i);
-                listOfMoves.add(i);
                 // Ifall vi får köra igen gör random move
                 if (t_successful && t_gameState.getNextPlayer() == t_currentPlayer)
                 {
-                    boolean t_generateRandomMove = false;
-                    while(!t_generateRandomMove) {
-                        int t_move = 1 + (int) (Math.random() * 6);
-                        t_generateRandomMove = t_gameState.makeMove(t_move);
-                        if (t_generateRandomMove) {
-                            listOfMoves.add(t_move);
-                            if(t_gameState.getNextPlayer() == t_currentPlayer)
-                            {
-                                t_generateRandomMove = false;
-                            }
-                        }
-                    }
+                    childNodes[i] = new Node(m_depth+1, t_gameState, m_max);
+                    childNodes[i].CreateChildren(); // TODO Launch a new thread here
                 }
                 if (t_successful) {
-                    childNodes[i] = new Node(m_depth+1, t_gameState);
+                    childNodes[i] = new Node(m_depth+1, t_gameState, !m_max);
                     childNodes[i].CreateChildren(); // TODO Launch a new thread here
                     if (r_score > t_bestScore)
                     {
