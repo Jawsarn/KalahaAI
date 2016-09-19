@@ -15,11 +15,11 @@ public class TreeHandler {
 
     }
 
-    public void CreateTree(GameState p_currentState, int p_playerMax, int p_maxDepth)
+    public void CreateTree(GameState p_currentState, int p_playerMax, int p_maxDepth) throws Exception
     {
+        m_maxDepth = p_maxDepth;
         m_rootNode = new Node(0, p_currentState.clone(), true); // TODO do we need to clone?
         m_rootNode.CreateChildren();
-        m_maxDepth = p_maxDepth;
         m_playerMax = p_playerMax;
         if (p_playerMax == 1)
             m_playerMin=2;
@@ -34,8 +34,8 @@ public class TreeHandler {
 
     public int GetBestMove()
     {
-        // int r_move = m_rootNode.getBestMove(); // TODO return thisone
-        return getRandom();
+        int r_move = m_rootNode.GetBestMove(); // TODO return thisone
+        return r_move;
     }
     public int getRandom()
     {

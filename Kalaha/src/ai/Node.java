@@ -1,5 +1,6 @@
 package ai;
 import kalaha.*;
+import sun.reflect.generics.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,62 +13,60 @@ public class Node{
     int m_depth;
     int m_maxDepth;
     GameState m_gameState;
-    Node[] childNodes = new Node[6];
+    Node[] childNodes;
     int m_bestValue = 0;
     int m_bestNodeIndex = -1;
     boolean m_max;
-    List<Integer> listOfMoves = new ArrayList<Integer>();
     Node(int p_depth, GameState p_gameState, boolean p_max){
         m_depth = p_depth;
         m_gameState = p_gameState;
         m_maxDepth = TreeHandler.m_maxDepth;
         m_max = p_max;
+        childNodes = new Node[6];
+    }
 
-    }
-    List<Integer> GetMoveList(){
-        return listOfMoves;
-    }
     // Returns the score in the current node
-    int CreateChildren()
+    int CreateChildren() throws Exception
     {
-        int r_score = 0;
-        if (m_depth >= m_maxDepth)
+        int r_score;
+        // Do we have time?
+        if (false)
+        {
+            throw new Exception("Out of time");
+        }
+
+        if (m_depth >= m_maxDepth || m_gameState.gameEnded())
         {
             //börja propagera uppåt å skit
             r_score = UtilityFunction();
         }
         else{
             int t_bestChild = -1;
-            int t_bestScore = -1000;
+            if (m_max)
+                r_score = Integer.MIN_VALUE;
+            else
+                r_score = Integer.MAX_VALUE;
 
-            for (int i = 0; i <6; i++)
+            for (int i = 0; i < 6; i++) // From 1-6
             {
                 GameState t_gameState = m_gameState.clone();
-                int t_currentPlayer = t_gameState.getNextPlayer();
-                boolean t_successful = t_gameState.makeMove(i);
-                // Ifall vi får köra igen skicka ner att nästa nivå ska vara samma som denna (max/min)
-                if (t_successful && t_gameState.getNextPlayer() == t_currentPlayer)
-                {
-                    childNodes[i] = new Node(m_depth+1, t_gameState, m_max);
-                    childNodes[i].CreateChildren(); // TODO Launch a new thread here
-                    if (r_score > t_bestScore)
-                    {
-                        t_bestScore = r_score;
-                        t_bestChild = i;
-                    }
-                }
+                boolean t_successful = t_gameState.makeMove(i + 1);
+
                 if (t_successful) {
-                    childNodes[i] = new Node(m_depth+1, t_gameState, !m_max);
-                    childNodes[i].CreateChildren(); // TODO Launch a new thread here
-                    if ((m_max && r_score > t_bestScore) || (!m_max && r_score<t_bestScore))
-                    {
-                        t_bestScore = r_score;
-                        t_bestChild = i;
+                    childNodes[i] = new Node(m_depth + 1, t_gameState, t_gameState.getNextPlayer() == TreeHandler.m_playerMax);
+                    int t_childScore = childNodes[i].CreateChildren(); // TODO Launch a new thread here
+
+                    // Check what child had the best score
+                    if ((m_max && t_childScore > r_score) || (!m_max && t_childScore < r_score)) {
+                        r_score = t_childScore;
+                        t_bestChild = i + 1;
                     }
                 }
             }
+
+            // Save the best score and move
             m_bestNodeIndex = t_bestChild;
-            m_bestValue = t_bestScore;
+            m_bestValue = r_score;
             //Creatat allt lägg kod här för det som ska hända efter
         }
         return r_score;
