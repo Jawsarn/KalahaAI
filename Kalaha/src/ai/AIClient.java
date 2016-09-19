@@ -98,7 +98,7 @@ public class AIClient implements Runnable
      * 
      * @param txt The text to add
      */
-    public static void addText(String txt)
+    public static void addText(String txt) // TODO change from static so we dont write to same output
     {
         //Don't change this
         text.append(txt + "\n");
