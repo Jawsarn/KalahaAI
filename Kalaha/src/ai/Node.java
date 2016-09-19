@@ -45,11 +45,16 @@ public class Node{
                 GameState t_gameState = m_gameState.clone();
                 int t_currentPlayer = t_gameState.getNextPlayer();
                 boolean t_successful = t_gameState.makeMove(i);
-                // Ifall vi får köra igen gör random move
+                // Ifall vi får köra igen skicka ner att nästa nivå ska vara samma som denna (max/min)
                 if (t_successful && t_gameState.getNextPlayer() == t_currentPlayer)
                 {
                     childNodes[i] = new Node(m_depth+1, t_gameState, m_max);
                     childNodes[i].CreateChildren(); // TODO Launch a new thread here
+                    if (r_score > t_bestScore)
+                    {
+                        t_bestScore = r_score;
+                        t_bestChild = i;
+                    }
                 }
                 if (t_successful) {
                     childNodes[i] = new Node(m_depth+1, t_gameState, !m_max);
