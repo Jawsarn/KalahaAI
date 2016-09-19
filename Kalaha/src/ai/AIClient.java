@@ -215,7 +215,7 @@ public class AIClient implements Runnable
      */
     public int getMove(GameState currentBoard)
     {
-        treeHandler.CreateTree(currentBoard);
+        treeHandler.CreateTree(currentBoard, player);
         int myMove = treeHandler.GetBestMove();
 
         return myMove;
