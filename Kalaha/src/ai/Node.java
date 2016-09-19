@@ -59,7 +59,7 @@ public class Node{
                 if (t_successful) {
                     childNodes[i] = new Node(m_depth+1, t_gameState, !m_max);
                     childNodes[i].CreateChildren(); // TODO Launch a new thread here
-                    if (r_score > t_bestScore)
+                    if ((m_max && r_score > t_bestScore) || (!m_max && r_score<t_bestScore))
                     {
                         t_bestScore = r_score;
                         t_bestChild = i;

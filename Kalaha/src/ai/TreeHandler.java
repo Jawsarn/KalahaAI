@@ -17,7 +17,7 @@ public class TreeHandler {
 
     public void CreateTree(GameState p_currentState, int p_playerMax, int p_maxDepth)
     {
-        m_rootNode = new Node(0, p_currentState.clone()); // TODO do we need to clone?
+        m_rootNode = new Node(0, p_currentState.clone(), true); // TODO do we need to clone?
         m_rootNode.CreateChildren();
         m_maxDepth = p_maxDepth;
         m_playerMax = p_playerMax;
