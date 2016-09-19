@@ -1,6 +1,9 @@
 package ai;
 import kalaha.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by TAJMS on 2016-09-15.
@@ -12,10 +15,15 @@ public class Node{
     Node[] childNodes = new Node[6];
     int m_bestValue = 0;
     int m_bestNodeIndex = -1;
+    List<Integer> listOfMoves = new ArrayList<Integer>();
     Node(int p_depth, GameState p_gameState){
         m_depth = p_depth;
         m_gameState = p_gameState;
         m_maxDepth = TreeHandler.m_maxDepth;
+
+    }
+    List<Integer> GetMoveList(){
+        return listOfMoves;
     }
     // Returns the score in the current node
     int CreateChildren()
@@ -33,9 +41,25 @@ public class Node{
             for (int i = 0; i <6; i++)
             {
                 GameState t_gameState = m_gameState.clone();
+                int t_currentPlayer = t_gameState.getNextPlayer();
                 boolean t_successful = t_gameState.makeMove(i);
+                listOfMoves.add(i);
                 // Ifall vi får köra igen gör random move
-                if (t_gameState.getNextPlayer() == TreeHandler)
+                if (t_successful && t_gameState.getNextPlayer() == t_currentPlayer)
+                {
+                    boolean t_generateRandomMove = false;
+                    while(!t_generateRandomMove) {
+                        int t_move = 1 + (int) (Math.random() * 6);
+                        t_generateRandomMove = t_gameState.makeMove(t_move);
+                        if (t_generateRandomMove) {
+                            listOfMoves.add(t_move);
+                            if(t_gameState.getNextPlayer() == t_currentPlayer)
+                            {
+                                t_generateRandomMove = false;
+                            }
+                        }
+                    }
+                }
                 if (t_successful) {
                     childNodes[i] = new Node(m_depth+1, t_gameState);
                     childNodes[i].CreateChildren(); // TODO Launch a new thread here
