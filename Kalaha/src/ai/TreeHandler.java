@@ -10,15 +10,16 @@ public class TreeHandler {
     public static int m_playerMax;
     public static int m_playerMin;
     Node m_rootNode;
-    public TreeHandler(int p_maxDepth)
+    public TreeHandler()
     {
-        m_maxDepth = p_maxDepth;
+
     }
 
-    public void CreateTree(GameState p_currentState, int p_playerMax)
+    public void CreateTree(GameState p_currentState, int p_playerMax, int p_maxDepth)
     {
         m_rootNode = new Node(0, p_currentState.clone()); // TODO do we need to clone?
         m_rootNode.CreateChildren();
+        m_maxDepth = p_maxDepth;
         m_playerMax = p_playerMax;
         if (p_playerMax == 1)
             m_playerMin=2;

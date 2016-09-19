@@ -44,7 +44,7 @@ public class AIClient implements Runnable
             socket = new Socket("localhost", KalahaMain.port);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            treeHandler = new TreeHandler(5);
+            treeHandler = new TreeHandler();
 
             addText("Done");
             connected = true;
@@ -215,7 +215,7 @@ public class AIClient implements Runnable
      */
     public int getMove(GameState currentBoard)
     {
-        treeHandler.CreateTree(currentBoard, player);
+        treeHandler.CreateTree(currentBoard, player, 5);
         int myMove = treeHandler.GetBestMove();
 
         return myMove;
