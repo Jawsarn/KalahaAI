@@ -3,7 +3,7 @@ import kalaha.*;
 
 
 /**
- * Created by Becca on 2016-09-15.
+ * Created by TAJMS on 2016-09-15.
  */
 public class Node{
     int m_depth;
@@ -15,6 +15,7 @@ public class Node{
     Node(int p_depth, GameState p_gameState){
         m_depth = p_depth;
         m_gameState = p_gameState;
+        m_maxDepth = TreeHandler.m_maxDepth;
     }
     // Returns the score in the current node
     int CreateChildren()
@@ -33,9 +34,11 @@ public class Node{
             {
                 GameState t_gameState = m_gameState.clone();
                 boolean t_successful = t_gameState.makeMove(i);
+                // Ifall vi får köra igen gör random move
+                if (t_gameState.getNextPlayer() == TreeHandler)
                 if (t_successful) {
-                    childNodes[i] = new Node(m_depth++, t_gameState);
-                    r_score = childNodes[i].CreateChildren(); // TODO Launch a new thread here
+                    childNodes[i] = new Node(m_depth+1, t_gameState);
+                    childNodes[i].CreateChildren(); // TODO Launch a new thread here
                     if (r_score > t_bestScore)
                     {
                         t_bestScore = r_score;
