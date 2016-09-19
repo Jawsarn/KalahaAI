@@ -5,6 +5,8 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 import java.awt.*;
+import java.time.Clock;
+
 import kalaha.*;
 
 /**
@@ -16,7 +18,7 @@ import kalaha.*;
 public class AIClient implements Runnable
 {
     private int player;
-    private JTextArea text;
+    private static JTextArea text;
     
     private PrintWriter out;
     private BufferedReader in;
@@ -26,6 +28,7 @@ public class AIClient implements Runnable
     private boolean connected;
 
     private TreeHandler treeHandler;
+
     /**
      * Creates a new client.
      */
@@ -95,7 +98,7 @@ public class AIClient implements Runnable
      * 
      * @param txt The text to add
      */
-    public void addText(String txt)
+    public static void addText(String txt)
     {
         //Don't change this
         text.append(txt + "\n");
@@ -216,18 +219,10 @@ public class AIClient implements Runnable
     public int getMove(GameState currentBoard)
     {
         int move = getRandom();
-        int maxDepth = 1;
-        // start time
-        while(true) {
-            try {
-                treeHandler.CreateTree(currentBoard, player, maxDepth++);
-                move = treeHandler.GetBestMove();
-            }
-            catch (Exception e)
-            {
-                break;
-            }
-        }
+
+        treeHandler.CreateTree(currentBoard, player, 2);
+        move = treeHandler.GetBestMove();
+
         return move;
     }
     

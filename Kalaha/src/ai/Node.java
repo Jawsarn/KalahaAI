@@ -17,7 +17,12 @@ public class Node{
     int m_bestValue = 0;
     int m_bestNodeIndex = -1;
     boolean m_max;
-    Node(int p_depth, GameState p_gameState, boolean p_max){
+    Node(int p_depth, GameState p_gameState, boolean p_max) throws Exception {
+        if (System.currentTimeMillis() - TreeHandler.m_startTime > 5000) // max 5 sec
+        {
+            AIClient.addText("Time in throw1 " + (System.currentTimeMillis() - TreeHandler.m_startTime));
+            throw new Exception("Out of time");
+        }
         m_depth = p_depth;
         m_gameState = p_gameState;
         m_maxDepth = TreeHandler.m_maxDepth;
@@ -29,9 +34,11 @@ public class Node{
     int CreateChildren() throws Exception
     {
         int r_score;
+
         // Do we have time?
-        if (false)
+        if (System.currentTimeMillis() - TreeHandler.m_startTime > 5000) // max 5 sec
         {
+            AIClient.addText("Time in throw2 " + (System.currentTimeMillis() - TreeHandler.m_startTime));
             throw new Exception("Out of time");
         }
 
@@ -51,11 +58,20 @@ public class Node{
             {
                 GameState t_gameState = m_gameState.clone();
                 boolean t_successful = t_gameState.makeMove(i + 1);
-
+                // Do we have time?
+                if (System.currentTimeMillis() - TreeHandler.m_startTime > 5000) // max 5 sec
+                {
+                    AIClient.addText("Time in throw3 " + (System.currentTimeMillis() - TreeHandler.m_startTime));
+                    throw new Exception("Out of time");
+                }
                 if (t_successful) {
                     childNodes[i] = new Node(m_depth + 1, t_gameState, t_gameState.getNextPlayer() == TreeHandler.m_playerMax);
                     int t_childScore = childNodes[i].CreateChildren(); // TODO Launch a new thread here
-
+                    if (System.currentTimeMillis() - TreeHandler.m_startTime > 5000) // max 5 sec
+                    {
+                        AIClient.addText("Time in throw4 " + (System.currentTimeMillis() - TreeHandler.m_startTime));
+                        throw new Exception("Out of time");
+                    }
                     // Check what child had the best score
                     if ((m_max && t_childScore > r_score) || (!m_max && t_childScore < r_score)) {
                         r_score = t_childScore;
@@ -68,6 +84,11 @@ public class Node{
             m_bestNodeIndex = t_bestChild;
             m_bestValue = r_score;
             //Creatat allt lägg kod här för det som ska hända efter
+        }
+        if (System.currentTimeMillis() - TreeHandler.m_startTime > 5000) // max 5 sec
+        {
+            AIClient.addText("Time in throw5 " + (System.currentTimeMillis() - TreeHandler.m_startTime));
+            throw new Exception("Out of time");
         }
         return r_score;
     }
