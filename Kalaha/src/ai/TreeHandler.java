@@ -43,6 +43,7 @@ public class TreeHandler {
                 break;
             }
         }
+        Timer.PrintTimers();
     }
 
     public void SetTreeMaxDepth(int p_maxDepth)
