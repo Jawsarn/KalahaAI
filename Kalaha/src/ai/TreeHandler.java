@@ -37,7 +37,6 @@ public class TreeHandler {
                 m_rootNode = new Node(0, p_currentState.clone(), true); // TODO do we need to clone?
                 m_rootNode.CreateChildren();
                 m_move = m_rootNode.GetBestMove();
-                AIClient.addText("Tree took " + (System.currentTimeMillis() - m_startTime));
                 m_maxDepth += 1;
             } catch (Exception e) {
                 break;
