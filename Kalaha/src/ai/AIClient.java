@@ -18,7 +18,7 @@ import kalaha.*;
 public class AIClient implements Runnable
 {
     private int player;
-    private JTextArea text;
+    private static JTextArea text;
     
     private PrintWriter out;
     private BufferedReader in;
@@ -98,7 +98,7 @@ public class AIClient implements Runnable
      * 
      * @param txt The text to add
      */
-    public void addText(String txt) // TODO change from static so we dont write to same output
+    public static void addText(String txt) // TODO change from static so we dont write to same output
     {
         //Don't change this
         text.append(txt + "\n");

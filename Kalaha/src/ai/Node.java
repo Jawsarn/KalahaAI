@@ -1,4 +1,5 @@
 package ai;
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import kalaha.*;
 import sun.reflect.generics.tree.Tree;
 
@@ -10,17 +11,23 @@ import java.util.List;
  * Created by TAJMS on 2016-09-15.
  */
 public class Node{
+    public static boolean m_allTeminationNodes;
     int m_depth;
     int m_maxDepth;
     GameState m_gameState;
     int m_bestValue = 0;
     int m_bestNodeIndex = -1;
     boolean m_max;
-    Node(int p_depth, GameState p_gameState, boolean p_max) throws Exception {
+    int m_alpha;
+    int m_beta;
+    Node(int p_depth, GameState p_gameState, boolean p_max, int p_alpha, int p_beta) throws Exception {
         m_depth = p_depth;
         m_gameState = p_gameState;
         m_maxDepth = TreeHandler.m_maxDepth;
         m_max = p_max;
+        m_alpha = p_alpha; // Max should be above
+        m_beta = p_beta; // Max should be below
+
     }
 
     // Returns the score in the current node
@@ -36,6 +43,10 @@ public class Node{
 
         if (m_depth >= m_maxDepth || m_gameState.gameEnded())
         {
+            if (!m_gameState.gameEnded())
+            {
+                m_allTeminationNodes = false;
+            }
             //börja propagera uppåt å skit
             r_score = UtilityFunction();
         }
@@ -53,7 +64,8 @@ public class Node{
                 boolean t_successful = t_gameState.makeMove(i + 1);
 
                 if (t_successful) {
-                    Node newNode = new Node(m_depth + 1, t_gameState, t_gameState.getNextPlayer() == TreeHandler.m_playerMax);
+                    Node newNode = new Node(m_depth + 1, t_gameState, t_gameState.getNextPlayer() == TreeHandler.m_playerMax,
+                            m_alpha, m_beta);
 
                     int t_childScore = newNode.CreateChildren(); // TODO Launch a new thread here
 
@@ -61,7 +73,22 @@ public class Node{
                     if ((m_max && t_childScore > r_score) || (!m_max && t_childScore < r_score)) {
                         r_score = t_childScore;
                         t_bestChild = i + 1;
+                        // Move pruning here
+                        if(m_max)
+                        {
+                            m_alpha = Math.max(r_score, m_alpha);
+                            if (m_alpha >= m_beta)
+                                break;
+                        }
+                        else
+                        {
+                            m_beta = Math.min(r_score, m_beta);
+                            if (m_beta <= m_alpha)
+                                break;
+                        }
                     }
+
+
                 }
             }
 

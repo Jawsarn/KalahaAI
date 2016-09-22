@@ -2,6 +2,8 @@ package ai;
 
 import kalaha.GameState;
 
+import javax.print.DocFlavor;
+
 /**
  * Created by Konrad on 2016-09-15.
  */
@@ -31,10 +33,12 @@ public class TreeHandler {
         m_move = getRandom();
         // start time
         m_startTime = System.currentTimeMillis();
+        Node.m_allTeminationNodes = false;
 
-        while(true) {
+        while(!Node.m_allTeminationNodes) {
             try {
-                m_rootNode = new Node(0, p_currentState.clone(), true); // TODO do we need to clone?
+                Node.m_allTeminationNodes = true;
+                m_rootNode = new Node(0, p_currentState.clone(), true, Integer.MIN_VALUE, Integer.MAX_VALUE); // TODO do we need to clone?
                 m_rootNode.CreateChildren();
                 m_move = m_rootNode.GetBestMove();
                 m_maxDepth += 1;
@@ -42,6 +46,7 @@ public class TreeHandler {
                 break;
             }
         }
+        AIClient.addText("The Tree reached " + m_maxDepth);
         Timer.PrintTimers();
     }
 
