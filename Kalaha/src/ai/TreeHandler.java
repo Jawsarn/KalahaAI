@@ -46,7 +46,6 @@ public class TreeHandler {
                 break;
             }
         }
-        AIClient.addText("The Tree reached " + m_maxDepth);
         Timer.PrintTimers();
     }
 
@@ -67,5 +66,9 @@ public class TreeHandler {
     public void ReleaseTree()
     {
 
+    }
+    public int GetTreeDepth()
+    {
+        return m_maxDepth;
     }
 }

@@ -18,7 +18,7 @@ import kalaha.*;
 public class AIClient implements Runnable
 {
     private int player;
-    private static JTextArea text;
+    private JTextArea text;
     
     private PrintWriter out;
     private BufferedReader in;
@@ -98,7 +98,7 @@ public class AIClient implements Runnable
      * 
      * @param txt The text to add
      */
-    public static void addText(String txt) // TODO change from static so we dont write to same output
+    public void addText(String txt) // TODO change from static so we dont write to same output
     {
         //Don't change this
         text.append(txt + "\n");
@@ -172,7 +172,7 @@ public class AIClient implements Runnable
                             //function.
                             GameState currentBoard = new GameState(currentBoardStr);
                             int cMove = getMove(currentBoard);
-                            
+                            int depth =treeHandler.GetTreeDepth();
                             //Timer stuff
                             long tot = System.currentTimeMillis() - startT;
                             double e = (double)tot / (double)1000;
@@ -182,7 +182,7 @@ public class AIClient implements Runnable
                             if (!reply.startsWith("ERROR"))
                             {
                                 validMove = true;
-                                addText("Made move " + cMove + " in " + e + " secs");
+                                addText("Made move " + cMove + " in " + e + " secs and reached a depth of " + depth);
                             }
                         }
                     }
